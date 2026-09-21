@@ -1,27 +1,37 @@
+import os
 import pandas as pd
 import streamlit as st
 
+# Page Configuration
 st.set_page_config(
     page_title="Ukraine Protection Tracker - Greece",
     page_icon="🇺🇦",
     layout="wide",
 )
 
+# Title & Description
 st.title("🇺🇦 Temporary Protection Beneficiaries in Greece")
 st.write(
     "Tracking Ukrainian refugees under Temporary Protection status in Greece"
     " based on official Eurostat data."
 )
 
-# Load Data
-import os
+# 1. Get the directory path where app.py is located
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-# Get absolute path relative to app.py
+# 2. Automatically find any CSV file in that directory
+csv_files = [f for f in os.listdir(dir_path) if f.endswith(".csv")]
 
-csv_path = os.path.join(dir_path, "ukraine_greece.csv")
+if not csv_files:
+    st.error(
+        "No CSV file found in the GitHub repository. Please upload your"
+        " dataset."
+    )
+    st.stop()
 
+# 3. Load the CSV file automatically
+csv_path = os.path.join(dir_path, csv_files[0])
 df = pd.read_csv(csv_path)
-
 # Latest Month KPIs
 latest = df.iloc[-1]
 
