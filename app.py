@@ -14,7 +14,7 @@ st.write(
 )
 
 # Load Data
-df = pd.read_csv("ukraine_greece.csv")
+df = pd.read_csv("ukraine_greece.csv.csv")
 
 # Latest Month KPIs
 latest = df.iloc[-1]
