@@ -17,7 +17,7 @@ st.write(
 import os
 
 # Get absolute path relative to app.py
-dir_path = os.path.dirname(os.path.realpath(__file__))
+
 csv_path = os.path.join(dir_path, "ukraine_greece.csv")
 
 df = pd.read_csv(csv_path)
