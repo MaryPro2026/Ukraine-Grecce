@@ -15,26 +15,32 @@ st.write(
     " based on official Eurostat data."
 )
 
-# 1. Locate file path safely
+# 1. Locate and load CSV file automatically
 dir_path = os.path.dirname(os.path.realpath(__file__))
-csv_path = os.path.join(dir_path, "ukraine_greece.csv")
+csv_files = [f for f in os.listdir(dir_path) if f.endswith(".csv")]
 
-# Verify file existence
-if not os.path.exists(csv_path):
-    st.error(f"Cannot find 'ukraine_greece.csv' in folder: {dir_path}")
+if not csv_files:
+    st.error("No .csv file found in the repository folder.")
     st.stop()
 
-# 2. Load Data
+csv_path = os.path.join(dir_path, csv_files[0])
 df = pd.read_csv(csv_path)
 
-# Clean column headers (strip spaces and force lowercase)
-df.columns = df.columns.str.strip().str.lower()
+# 2. Force-rename columns based on position (Column 1=Date, 2=Female, 3=Male, 4=Total)
+# This guarantees it works even if headers are misspelled or uppercase in the CSV
+if len(df.columns) >= 4:
+    df.columns = ["year_month", "female", "male", "total"] + list(
+        df.columns[4:]
+    )
+else:
+    # Fallback cleaning if less than 4 columns
+    df.columns = df.columns.str.strip().str.lower()
 
-# Convert numeric columns safely
+# 3. Convert numeric columns safely
 for col in ["female", "male", "total"]:
     df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
 
-# 3. KPI Metrics
+# 4. KPI Metrics
 latest = df.iloc[-1]
 
 col1, col2, col3 = st.columns(3)
@@ -44,7 +50,7 @@ col3.metric("Males", f"{latest['male']:,}")
 
 st.markdown("---")
 
-# 4. Visualizations
+# 5. Visualizations
 st.subheader("📈 Trend over Time")
 st.line_chart(df.set_index("year_month")[["total", "female", "male"]])
 
@@ -52,9 +58,13 @@ st.subheader("📊 Latest Gender Breakdown")
 if latest["total"] > 0:
     female_pct = (latest["female"] / latest["total"]) * 100
     st.progress(female_pct / 100)
-    st.caption(f"Female: **{female_pct:.1f}%** | Male:"
-        f" **{(100 - female_pct):.1f}%**")
+    st.caption(
+        f"Female: **{female_pct:.1f}%** | Male:"
+        f" **{(100 - female_pct):.1f}%**"
+    )
+
 st.markdown("---")
-# 5. Data Table
+
+# 6. Raw Data Table
 st.subheader("📋 Dataset")
 st.dataframe(df, use_container_width=True)
