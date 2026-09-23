@@ -34,7 +34,7 @@ st.markdown(
     }
     </style>
 """,
-    unsafe_allow_keywords=True,
+    unsafe_allow_html=True,
 )
 
 # 1. Locate and Load Dataset
@@ -129,7 +129,7 @@ c3.metric(
     delta=f"{male_delta:+,} vs prev. month",
 )
 
-st.markdown("<br>", unsafe_allow_keywords=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 # --- VISUALIZATIONS SECTION ---
 tab1, tab2 = st.tabs(["📈 Trend Analysis", "📊 Gender Distribution"])
