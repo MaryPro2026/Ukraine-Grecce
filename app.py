@@ -132,7 +132,7 @@ c3.metric(
 st.markdown("<br>", unsafe_allow_html=True)
 
 # --- VISUALIZATIONS SECTION ---
-tab1, tab2 = st.tabs(["📈 Trend Analysis", "📊 Gender Distribution"])
+tab1, tab2 = st.tabs([" Trend Analysis", " Gender Distribution"])
 
 with tab1:
     st.subheader("Beneficiaries Growth Over Time")
@@ -158,7 +158,7 @@ with tab2:
 st.markdown("---")
 
 # --- DATASET TABLE & EXPORT ---
-st.subheader("📋 Underlying Dataset")
+st.subheader(" Underlying Dataset")
 
 col_left, col_right = st.columns([3, 1])
 with col_left:
